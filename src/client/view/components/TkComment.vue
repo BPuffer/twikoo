@@ -1,42 +1,37 @@
 <template>
   <div class="tk-comment" :id="comment.id" :class="{ 'tk-master': comment.master }" ref="tk-comment">
-    <tk-avatar :config="config"
-        :nick="comment.nick"
-        :avatar="comment.avatar"
-        :mail-md5="comment.mailMd5"
-        :link="convertedLink" />
+    <tk-avatar :config="config" :nick="comment.nick" :avatar="comment.avatar" :mail-md5="comment.mailMd5"
+      :link="convertedLink" />
     <div class="tk-main">
       <div class="tk-row">
         <div class="tk-meta">
           <strong class="tk-nick" v-if="!convertedLink">{{ comment.nick }}</strong>
-          <a class="tk-nick tk-nick-link" v-if="convertedLink" :href="convertedLink" target="_blank" rel="noopener noreferrer">
+          <a class="tk-nick tk-nick-link" v-if="convertedLink" :href="convertedLink" target="_blank"
+            rel="noopener noreferrer">
             <strong>{{ comment.nick }}</strong>
           </a>
-          <span class="tk-tag tk-tag-green" v-if="comment.master">{{ config.MASTER_TAG || t('COMMENT_MASTER_TAG') }}</span>
+          <span class="tk-tag tk-tag-green" v-if="comment.master">{{ config.MASTER_TAG || t('COMMENT_MASTER_TAG')
+            }}</span>
           <span class="tk-tag tk-tag-red" v-if="comment.top">{{ t('COMMENT_TOP_TAG') }}</span>
           <span class="tk-tag tk-tag-yellow" v-if="comment.isSpam">{{ t('COMMENT_REVIEWING_TAG') }}</span>
           <small class="tk-time">
             <time :datetime="jsonTimestamp" :title="localeTime">{{ displayCreated }}</time>
           </small>
           <small class="tk-actions" v-if="isLogin">
-            <a href="#" v-if="comment.isSpam" @click="handleSpam(false, $event)">{{ t('ADMIN_COMMENT_SHOW') }}</a>
-            <a href="#" v-if="!comment.isSpam" @click="handleSpam(true, $event)">{{ t('ADMIN_COMMENT_HIDE') }}</a>
-            <a href="#" v-if="!comment.rid && comment.top" @click="handleTop(false, $event)">{{ t('ADMIN_COMMENT_UNTOP') }}</a>
-            <a href="#" v-if="!comment.rid && !comment.top" @click="handleTop(true, $event)">{{ t('ADMIN_COMMENT_TOP') }}</a>
+            <a v-if="comment.isSpam" @click="handleSpam(false, $event)">{{ t('ADMIN_COMMENT_SHOW') }}</a>
+            <a v-if="!comment.isSpam" @click="handleSpam(true, $event)">{{ t('ADMIN_COMMENT_HIDE') }}</a>
+            <a v-if="!comment.rid && comment.top" @click="handleTop(false, $event)">{{ t('ADMIN_COMMENT_UNTOP') }}</a>
+            <a v-if="!comment.rid && !comment.top" @click="handleTop(true, $event)">{{ t('ADMIN_COMMENT_TOP') }}</a>
           </small>
         </div>
-        <tk-action :liked="liked"
-            :disliked="disliked"
-            :like-count="ups"
-            :dislike-count="downs"
-            :replies-count="comment.replies.length"
-            :show-dislike="config.SHOW_DISLIKE !== 'false'"
-            @like="onLike"
-            @dislike="onDislike"
-            @reply="onReply" />
+        <tk-action :liked="liked" :disliked="disliked" :like-count="ups" :dislike-count="downs"
+          :replies-count="comment.replies.length" :show-dislike="config.SHOW_DISLIKE !== 'false'" @like="onLike"
+          @dislike="onDislike" @reply="onReply" />
       </div>
-      <div class="tk-content" :class="{ 'tk-content-expand': isContentExpanded || !showContentExpand }" ref="tk-content">
-        <span v-if="comment.pid">{{ t('COMMENT_REPLIED') }} <a class="tk-ruser" :href="`#${comment.pid}`">@{{ comment.ruser }}</a> :</span>
+      <div class="tk-content" :class="{ 'tk-content-expand': isContentExpanded || !showContentExpand }"
+        ref="tk-content">
+        <span v-if="comment.pid">{{ t('COMMENT_REPLIED') }} <a class="tk-ruser" :href="`#${comment.pid}`">@{{
+          comment.ruser }}</a> :</span>
         <span v-html="comment.comment" ref="comment" @click="popupLightbox"></span>
       </div>
       <div class="tk-expand-wrap" v-if="showContentExpand">
@@ -60,23 +55,13 @@
         </div>
       </div>
       <!-- 回复框 -->
-      <tk-submit v-if="replying && !pid"
-          :reply-id="replyId ? replyId : comment.id"
-          :pid="comment.id"
-          :config="config"
-          @load="onLoad"
-          @cancel="onCancel" />
+      <tk-submit v-if="replying && !pid" :reply-id="replyId ? replyId : comment.id" :pid="comment.id" :config="config"
+        @load="onLoad" @cancel="onCancel" />
       <!-- 回复列表 -->
       <div class="tk-replies" :class="{ 'tk-replies-expand': isExpanded || !showExpand || replying }" ref="tk-replies">
-        <tk-comment v-for="reply in comment.replies"
-            :key="reply.id"
-            :comment="reply"
-            :replyId="comment.id"
-            :replying="replying && pid === reply.id"
-            :config="config"
-            @expand="onExpand"
-            @load="onLoad"
-            @reply="onReplyReply" />
+        <tk-comment v-for="reply in comment.replies" :key="reply.id" :comment="reply" :replyId="comment.id"
+          :replying="replying && pid === reply.id" :config="config" @expand="onExpand" @load="onLoad"
+          @reply="onReplyReply" />
       </div>
       <div class="tk-expand-wrap" v-if="showExpand && !replying">
         <div class="tk-expand" @click="onExpand">{{ t('COMMENT_EXPAND') }}</div>
@@ -133,7 +118,7 @@ export default {
     TkAvatar,
     TkSubmit
   },
-  data () {
+  data() {
     return {
       pid: '',
       like: 0,
@@ -156,64 +141,64 @@ export default {
     config: Object
   },
   computed: {
-    displayCreated () {
+    displayCreated() {
       return timeago(this.comment.created)
     },
-    jsonTimestamp () {
+    jsonTimestamp() {
       return new Date(this.comment.created).toJSON()
     },
-    localeTime () {
+    localeTime() {
       return new Date(this.comment.created).toLocaleString()
     },
-    iconOs () {
+    iconOs() {
       return this.getIconBy(this.comment.os, osList)
     },
-    iconBrowser () {
+    iconBrowser() {
       return this.getIconBy(this.comment.browser, browserList)
     },
     iconLocation: () => iconLocation,
-    showExpand () {
+    showExpand() {
       return this.hasExpand && !this.isExpanded
     },
-    showCollapse () {
+    showCollapse() {
       return this.hasExpand && this.isExpanded
     },
-    showContentExpand () {
+    showContentExpand() {
       return this.hasContentExpand && !this.isContentExpanded
     },
-    showContentCollapse () {
+    showContentCollapse() {
       return this.hasContentExpand && this.isContentExpanded
     },
-    convertedLink () {
+    convertedLink() {
       return convertLink(this.comment.link)
     }
   },
   methods: {
     t,
-    getIconBy (name, list) {
+    getIconBy(name, list) {
       const lowerCaseName = name.toLowerCase()
       for (const key in list) {
         if (lowerCaseName.indexOf(key) !== -1) return list[key]
       }
       return iconOther
     },
-    showExpandIfNeed () {
+    showExpandIfNeed() {
       if (this.comment.replies && this.comment.replies.length > 0 && this.$refs['tk-replies']) {
         // 200 是回复区域最大高度
         // 36 是展开按钮高度
         this.hasExpand = this.$refs['tk-replies'].scrollHeight > 200 + 36
       }
     },
-    showContentExpandIfNeed () {
+    showContentExpandIfNeed() {
       // 如果已经折叠就不再判断 主要是为了防止图片在onload之前就已经折叠而导致图片在onload之后取消折叠
       this.hasContentExpand = this.hasContentExpand || this.$refs['tk-content'].scrollHeight > 500
     },
-    showContentExpandIfNeedAfterImagesLoaded () {
+    showContentExpandIfNeedAfterImagesLoaded() {
       this.$refs['tk-content'].querySelectorAll('img').forEach((imgEl) => {
         imgEl.onload = this.showContentExpandIfNeed
       })
     },
-    scrollToComment () {
+    scrollToComment() {
       if (window.location.hash.indexOf(this.comment.id) !== -1) {
         this.$refs['tk-comment'].scrollIntoView({
           behavior: 'smooth'
@@ -221,7 +206,7 @@ export default {
         this.$emit('expand')
       }
     },
-    async onLike () {
+    async onLike() {
       if (this.likeLoading) return
       this.likeLoading = true
       await call(this.$tcb, 'COMMENT_LIKE', { id: this.comment.id, type: 'up' })
@@ -237,7 +222,7 @@ export default {
       this.disliked = false
       this.likeLoading = false
     },
-    async onDislike () {
+    async onDislike() {
       if (this.likeLoading) return
       this.likeLoading = true
       await call(this.$tcb, 'COMMENT_LIKE', { id: this.comment.id, type: 'down' })
@@ -253,11 +238,11 @@ export default {
       this.liked = false
       this.likeLoading = false
     },
-    onReply (id) {
+    onReply(id) {
       this.pid = id
       this.$emit('reply', this.comment.id)
     },
-    onReplyReply (id) {
+    onReplyReply(id) {
       // 楼中楼回复
       this.pid = id
       if (id) {
@@ -268,11 +253,11 @@ export default {
         this.$emit('reply', '')
       }
     },
-    onCancel () {
+    onCancel() {
       this.pid = ''
       this.$emit('reply', '')
     },
-    onLoad () {
+    onLoad() {
       if (this.comment.replies.length > 0) {
         this.$refs['tk-replies'].lastElementChild.scrollIntoView({
           behavior: 'smooth',
@@ -284,19 +269,19 @@ export default {
       this.$emit('load')
       this.onExpand()
     },
-    onExpand () {
+    onExpand() {
       this.isExpanded = true
     },
-    onCollapse () {
+    onCollapse() {
       this.isExpanded = false
     },
-    onContentExpand () {
+    onContentExpand() {
       this.isContentExpanded = true
     },
-    onContentCollapse () {
+    onContentCollapse() {
       this.isContentExpanded = false
     },
-    async checkAuth () {
+    async checkAuth() {
       // 检查用户身份
       if (this.$tcb) {
         const currentUser = await this.$tcb.auth.getCurrenUser()
@@ -305,15 +290,13 @@ export default {
         this.isLogin = this.$twikoo.serverConfig && this.$twikoo.serverConfig.IS_ADMIN
       }
     },
-    handleSpam (isSpam, $event) {
-      $event.preventDefault()
+    handleSpam(isSpam, $event) {
       this.setComment({ isSpam })
     },
-    handleTop (top, $event) {
-      $event.preventDefault()
+    handleTop(top, $event) {
       this.setComment({ top })
     },
-    popupLightbox (event) {
+    popupLightbox(event) {
       if (this.$twikoo.serverConfig.LIGHTBOX !== 'true') return
       const { target } = event
       if (target.tagName === 'IMG' && !target.classList.contains('tk-owo-emotion')) {
@@ -329,7 +312,7 @@ export default {
         document.body.appendChild(lightbox)
       }
     },
-    async setComment (set) {
+    async setComment(set) {
       this.loading = true
       await call(this.$tcb, 'COMMENT_SET_FOR_ADMIN', {
         id: this.comment.id,
@@ -339,7 +322,7 @@ export default {
       this.$emit('load')
     }
   },
-  mounted () {
+  mounted() {
     this.$nextTick(this.showContentExpandIfNeed)
     this.$nextTick(this.showContentExpandIfNeedAfterImagesLoaded)
     this.$nextTick(this.showExpandIfNeed)
@@ -390,116 +373,141 @@ export default {
   flex: 1;
   width: 0;
 }
+
 .tk-row {
   flex: 1;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 }
+
 .tk-nick-link {
   color: inherit;
   text-decoration: none;
 }
+
 .tk-replies .tk-nick-link {
   font-size: .9em;
 }
+
 .tk-nick-link:hover {
   color: #409eff;
 }
+
 .tk-actions {
   display: none;
   margin-left: 1em;
 }
+
 .tk-comment:hover .tk-actions {
   display: inline;
 }
+
 .tk-extras {
   color: #999999;
   font-size: 0.875em;
   display: flex;
   flex-wrap: wrap;
 }
+
 .tk-extra {
   margin-top: 0.5rem;
   margin-right: 0.75rem;
   display: flex;
   align-items: center;
 }
+
 .tk-icon.__comment {
   height: 1em;
   width: 1em;
   line-height: 1;
 }
+
 .tk-extra-text {
   line-height: 1;
 }
+
 .tk-tag {
   display: inline-block;
   padding: 0 0.5em;
   font-size: 0.75em;
   background-color: #f2f6fc;
 }
+
 .tk-tag-green {
-  background-color: rgba(103,194,58,0.13);
-  border: 1px solid rgba(103,194,58,0.50);
+  background-color: rgba(103, 194, 58, 0.13);
+  border: 1px solid rgba(103, 194, 58, 0.50);
   border-radius: 2px;
   color: #67c23a;
 }
+
 .tk-tag-yellow {
-  background-color: rgba(230,162,60,0.13);
-  border: 1px solid rgba(230,162,60,0.50);
+  background-color: rgba(230, 162, 60, 0.13);
+  border: 1px solid rgba(230, 162, 60, 0.50);
   border-radius: 2px;
   color: #e6a23c;
 }
+
 .tk-tag-blue {
-  background-color: rgba(64,158,255,0.13);
-  border: 1px solid rgba(64,158,255,0.50);
+  background-color: rgba(64, 158, 255, 0.13);
+  border: 1px solid rgba(64, 158, 255, 0.50);
   border-radius: 2px;
   color: #409eff;
 }
+
 .tk-tag-red {
-  background-color: rgba(245,108,108,0.13);
-  border: 1px solid rgba(245,108,108,0.50);
+  background-color: rgba(245, 108, 108, 0.13);
+  border: 1px solid rgba(245, 108, 108, 0.50);
   border-radius: 2px;
   color: #f56c6c;
 }
+
 .tk-comment {
   margin-top: 1rem;
   display: flex;
   flex-direction: row;
   word-break: break-all;
 }
+
 .tk-content {
   margin-top: 0.5rem;
   overflow: hidden;
   max-height: 500px;
   position: relative;
 }
+
 .tk-content-expand {
   max-height: none;
 }
+
 .tk-replies .tk-content {
   font-size: .9em;
 }
+
 .tk-comment .vemoji {
   max-height: 2em;
   vertical-align: middle;
 }
+
 .tk-replies {
   max-height: 200px;
   overflow: hidden;
   position: relative;
 }
+
 .tk-replies-expand {
   max-height: none;
   overflow: unset;
 }
+
 .tk-submit {
   margin-top: 1rem;
 }
+
 .tk-expand {
   font-size: 0.75em;
 }
+
 .tk-lightbox {
   display: block;
   position: fixed;
@@ -510,6 +518,7 @@ export default {
   bottom: 0;
   z-index: 999;
 }
+
 .tk-lightbox-image {
   min-width: 100px;
   min-height: 30px;

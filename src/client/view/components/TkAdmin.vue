@@ -1,7 +1,7 @@
 <template>
   <div class="tk-admin-container">
     <div class="tk-admin" :class="{ '__show': show }" v-loading="loading">
-      <a class="tk-admin-close" href="#" @click="onClose" v-html="iconClose"></a>
+      <a class="tk-admin-close" @click="onClose" v-html="iconClose"></a>
       <div class="tk-login-title" v-if="needUpdate">
         <div>{{ t('ADMIN_NEED_UPDATE') }}</div>
         <a href="https://twikoo.js.org/update.html" target="_blank">https://twikoo.js.org/update.html</a>
@@ -11,33 +11,41 @@
           <div class="tk-login-title">{{ t('ADMIN_LOGIN_TITLE') }}</div>
           <form>
             <input type="hidden" />
-            <el-input class="tk-password" :placeholder="t('ADMIN_PASSWORD_PLACEHOLDER')" v-model="password" show-password @keyup.enter.native="onLogin" ref="focusme">
+            <el-input class="tk-password" :placeholder="t('ADMIN_PASSWORD_PLACEHOLDER')" v-model="password"
+              show-password @keyup.enter.native="onLogin" ref="focusme">
               <template slot="prepend">{{ t('ADMIN_PASSWORD') }}</template>
               <el-button slot="append" @click="onLogin">{{ t('ADMIN_LOGIN') }}</el-button>
             </el-input>
           </form>
           <div class="tk-login-msg" v-if="loginErrorMessage">
             {{ loginErrorMessage }}
-            <a href="https://twikoo.js.org/faq.html" rel="noopener noreferrer" target="_blank">{{ t('ADMIN_FORGOT') }}</a>
+            <a href="https://twikoo.js.org/faq.html" rel="noopener noreferrer" target="_blank">{{ t('ADMIN_FORGOT')
+              }}</a>
           </div>
         </div>
         <div class="tk-regist" v-if="!isLogin && !isSetPassword">
           <div class="tk-login-title">{{ t('ADMIN_LOGIN_TITLE') }}</div>
           <form>
-            <el-input class="tk-password" :placeholder="t('ADMIN_CREDENTIALS_PLACEHOLDER')" v-if="!isSetCredentials" v-model="credentials" ref="focusme">
+            <el-input class="tk-password" :placeholder="t('ADMIN_CREDENTIALS_PLACEHOLDER')" v-if="!isSetCredentials"
+              v-model="credentials" ref="focusme">
               <template slot="prepend">{{ t('ADMIN_CREDENTIALS') }}</template>
             </el-input>
-            <el-input class="tk-password" :placeholder="t('ADMIN_SET_PASSWORD_PLACEHOLDER')" v-model="password" show-password>
+            <el-input class="tk-password" :placeholder="t('ADMIN_SET_PASSWORD_PLACEHOLDER')" v-model="password"
+              show-password>
               <template slot="prepend">{{ t('ADMIN_SET_PASSWORD') }}</template>
             </el-input>
-            <el-input class="tk-password" :placeholder="t('ADMIN_SET_PASSWORD_CONFIRM_PLACEHOLDER')" v-model="passwordConfirm" show-password>
+            <el-input class="tk-password" :placeholder="t('ADMIN_SET_PASSWORD_CONFIRM_PLACEHOLDER')"
+              v-model="passwordConfirm" show-password>
               <template slot="prepend">{{ t('ADMIN_SET_PASSWORD_CONFIRM') }}</template>
             </el-input>
           </form>
-          <el-button class="tk-regist-button" :disabled="!canRegist" @click="onRegist">{{ t('ADMIN_REGIST') }}</el-button>
+          <el-button class="tk-regist-button" :disabled="!canRegist" @click="onRegist">{{ t('ADMIN_REGIST')
+            }}</el-button>
           <div class="tk-login-msg" v-if="loginErrorMessage">{{ loginErrorMessage }}</div>
           <div class="tk-login-msg" v-if="!isSetCredentials">
-            <a href="https://twikoo.js.org/faq.html" rel="noopener noreferrer" target="_blank">{{ t('ADMIN_CREDENTIALS_FAQ') }}</a>
+            <a href="https://twikoo.js.org/faq.html" rel="noopener noreferrer" target="_blank">{{
+              t('ADMIN_CREDENTIALS_FAQ')
+              }}</a>
           </div>
         </div>
         <div class="tk-panel" v-if="isLogin">
@@ -46,10 +54,14 @@
             <a class="tk-panel-logout" href="#" @click="onLogout">{{ t('ADMIN_LOGOUT') }}</a>
           </div>
           <div class="tk-tabs">
-            <div class="tk-tab" :class="{ __active: activeTabName === 'comment' }" @click="activeTabName = 'comment'">{{ t('ADMIN_COMMENT') }}</div>
-            <div class="tk-tab" :class="{ __active: activeTabName === 'config' }" @click="activeTabName = 'config'">{{ t('ADMIN_CONFIG') }}</div>
-            <div class="tk-tab" :class="{ __active: activeTabName === 'import' }" @click="activeTabName = 'import'">{{ t('ADMIN_IMPORT') }}</div>
-            <div class="tk-tab" :class="{ __active: activeTabName === 'export' }" @click="activeTabName = 'export'">{{ t('ADMIN_EXPORT') }}</div>
+            <div class="tk-tab" :class="{ __active: activeTabName === 'comment' }" @click="activeTabName = 'comment'">{{
+              t('ADMIN_COMMENT') }}</div>
+            <div class="tk-tab" :class="{ __active: activeTabName === 'config' }" @click="activeTabName = 'config'">{{
+              t('ADMIN_CONFIG') }}</div>
+            <div class="tk-tab" :class="{ __active: activeTabName === 'import' }" @click="activeTabName = 'import'">{{
+              t('ADMIN_IMPORT') }}</div>
+            <div class="tk-tab" :class="{ __active: activeTabName === 'export' }" @click="activeTabName = 'export'">{{
+              t('ADMIN_EXPORT') }}</div>
           </div>
           <tk-admin-comment v-show="activeTabName === 'comment'" />
           <tk-admin-config v-show="activeTabName === 'config'" />
@@ -80,7 +92,7 @@ export default {
   props: {
     show: Boolean
   },
-  data () {
+  data() {
     return {
       iconClose,
       loading: true,
@@ -97,7 +109,7 @@ export default {
     }
   },
   computed: {
-    canRegist () {
+    canRegist() {
       return !this.isSetPassword &&
         !!this.password &&
         this.password === this.passwordConfirm &&
@@ -106,7 +118,7 @@ export default {
   },
   methods: {
     t,
-    async onLogin () {
+    async onLogin() {
       if (!this.password) {
         this.loginErrorMessage = t('ADMIN_PASSWORD_REQUIRED')
         return
@@ -138,7 +150,7 @@ export default {
       }
       this.loading = false
     },
-    async onLogout ($event) {
+    async onLogout($event) {
       $event.preventDefault()
       this.loading = true
       if (this.$tcb) {
@@ -152,7 +164,7 @@ export default {
       this.isLogin = false
       this.loading = false
     },
-    async onRegist () {
+    async onRegist() {
       this.loading = true
       const passwordMd5 = md5(this.password)
       const res = await call(this.$tcb, 'SET_PASSWORD', {
@@ -172,7 +184,7 @@ export default {
       }
       this.loading = false
     },
-    async onShow () {
+    async onShow() {
       this.loading = true
       await this.checkAuth()
       if (!this.isLogin) {
@@ -181,13 +193,13 @@ export default {
       }
       this.loading = false
     },
-    focusPassword () {
+    focusPassword() {
       // 聚焦密码输入框
       setTimeout(() => {
         this.$refs.focusme && this.$refs.focusme.focus()
       }, 500)
     },
-    async checkAuth () {
+    async checkAuth() {
       // 检查用户身份
       if (this.$tcb) {
         const currentUser = await this.$tcb.auth.getCurrenUser()
@@ -199,7 +211,7 @@ export default {
         }
       }
     },
-    async checkIfPasswordSet () {
+    async checkIfPasswordSet() {
       // 检查是否设置过密码
       try {
         const res = await call(this.$tcb, 'GET_PASSWORD_STATUS')
@@ -212,13 +224,12 @@ export default {
         throw e
       }
     },
-    onClose ($event) {
-      $event.preventDefault()
+    onClose($event) {
       this.$emit('close')
     }
   },
   watch: {
-    show (val) {
+    show(val) {
       // 弹出管理面板
       if (val) this.onShow()
     }
@@ -236,6 +247,7 @@ export default {
   overflow: hidden;
   pointer-events: none;
 }
+
 .tk-admin {
   position: absolute;
   top: 0;
@@ -245,25 +257,30 @@ export default {
   overflow-y: auto;
   pointer-events: all;
   color: #ffffff;
-  background-color: rgba(0,0,0,0.60);
+  background-color: rgba(0, 0, 0, 0.60);
   backdrop-filter: blur(5px);
   transition: all 0.5s ease;
   visibility: hidden;
 }
+
 .tk-admin::-webkit-scrollbar {
   width: 5px;
   background-color: transparent;
 }
+
 .tk-admin::-webkit-scrollbar-track {
   background-color: transparent;
 }
+
 .tk-admin::-webkit-scrollbar-thumb {
-  background-color: rgba(255,255,255,0.31);
+  background-color: rgba(255, 255, 255, 0.31);
 }
+
 .tk-admin.__show {
   left: 0;
   visibility: visible;
 }
+
 .tk-admin-close {
   position: sticky;
   float: right;
@@ -276,6 +293,7 @@ export default {
   box-sizing: content-box;
   color: #ffffff;
 }
+
 .tk-login,
 .tk-regist {
   display: flex;
@@ -284,12 +302,14 @@ export default {
   width: 100%;
   padding: 0 2rem;
 }
+
 .tk-login-title {
   color: #ffffff;
   font-size: 1.25rem;
   text-align: center;
   margin-top: 10rem;
 }
+
 .tk-password,
 .tk-login-msg {
   color: #ffffff;
@@ -297,37 +317,45 @@ export default {
   text-align: center;
   margin-top: 1rem;
 }
+
 .tk-password .el-input__inner {
   min-width: 100px;
 }
+
 .tk-login-msg a {
   color: #ffffff;
   margin-left: 1em;
   text-decoration: underline;
 }
+
 .tk-regist-button {
   margin-top: 1rem;
 }
+
 .tk-panel {
   color: #ffffff;
   padding: 2rem;
 }
+
 .tk-panel-title {
   font-size: 1.5rem;
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
 }
+
 .tk-panel-logout {
   color: #ffffff;
   font-size: 1rem;
   text-decoration: underline;
 }
+
 .tk-panel .tk-tabs {
   display: flex;
   margin-bottom: 1em;
   border-bottom: 2px solid #c0c4cc;
 }
+
 .tk-panel .tk-tab {
   color: #c0c4cc;
   cursor: pointer;
@@ -335,6 +363,7 @@ export default {
   margin-right: 2em;
   margin-bottom: -2px;
 }
+
 .tk-panel .tk-tab.__active {
   color: #ffffff;
   border-bottom: 2px solid #ffffff;

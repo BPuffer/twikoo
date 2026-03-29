@@ -27,7 +27,7 @@ import iconDislike from '@fortawesome/fontawesome-free/svgs/regular/thumbs-down.
 import iconDislikeSolid from '@fortawesome/fontawesome-free/svgs/solid/thumbs-down.svg'
 
 export default {
-  data () {
+  data() {
     return {
       iconComment,
       iconCommentSolid,
@@ -46,27 +46,24 @@ export default {
     showDislike: Boolean
   },
   computed: {
-    likeCountStr () {
+    likeCountStr() {
       return this.likeCount > 0 ? `${this.likeCount}` : ''
     },
-    dislikeCountStr () {
+    dislikeCountStr() {
       return this.dislikeCount > 0 ? `${this.dislikeCount}` : ''
     },
-    repliesCountStr () {
+    repliesCountStr() {
       return this.repliesCount > 0 ? `${this.repliesCount}` : ''
     }
   },
   methods: {
-    onLike ($event) {
-      $event.preventDefault()
+    onLike($event) {
       this.$emit('like')
     },
-    onDislike ($event) {
-      $event.preventDefault()
+    onDislike($event) {
       this.$emit('dislike')
     },
-    onReply ($event) {
-      $event.preventDefault()
+    onReply($event) {
       this.$emit('reply')
     }
   }
@@ -78,6 +75,7 @@ export default {
   display: flex;
   align-items: center;
 }
+
 .tk-action-link {
   margin-left: 0.5rem;
   color: #409eff;
@@ -85,31 +83,38 @@ export default {
   display: flex;
   align-items: center;
 }
+
 .tk-action-link .tk-action-icon-solid {
   display: none;
 }
+
 .tk-action-link.tk-liked .tk-action-icon,
 .tk-action-link:hover .tk-action-icon {
   display: none;
 }
+
 .tk-action-link.tk-liked .tk-action-icon-solid,
 .tk-action-link:hover .tk-action-icon-solid {
   display: block;
 }
+
 .tk-action-link.tk-disliked .tk-action-icon,
 .tk-action-link.tk-disliked:hover .tk-action-icon {
   display: none;
 }
+
 .tk-action-link.tk-disliked .tk-action-icon-solid,
 .tk-action-link.tk-disliked:hover .tk-action-icon-solid {
   display: block;
 }
+
 .tk-action-count {
   margin-left: 0.25rem;
   font-size: 0.75rem;
   height: 1.5rem;
   line-height: 1.5rem;
 }
+
 .tk-action-icon {
   display: inline-block;
   height: 1em;
