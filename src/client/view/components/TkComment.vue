@@ -11,17 +11,19 @@
             <strong>{{ comment.nick }}</strong>
           </a>
           <span class="tk-tag tk-tag-green" v-if="comment.master">{{ config.MASTER_TAG || t('COMMENT_MASTER_TAG')
-            }}</span>
+          }}</span>
           <span class="tk-tag tk-tag-red" v-if="comment.top">{{ t('COMMENT_TOP_TAG') }}</span>
           <span class="tk-tag tk-tag-yellow" v-if="comment.isSpam">{{ t('COMMENT_REVIEWING_TAG') }}</span>
           <small class="tk-time">
             <time :datetime="jsonTimestamp" :title="localeTime">{{ displayCreated }}</time>
           </small>
           <small class="tk-actions" v-if="isLogin">
-            <a v-if="comment.isSpam" @click="handleSpam(false, $event)">{{ t('ADMIN_COMMENT_SHOW') }}</a>
-            <a v-if="!comment.isSpam" @click="handleSpam(true, $event)">{{ t('ADMIN_COMMENT_HIDE') }}</a>
-            <a v-if="!comment.rid && comment.top" @click="handleTop(false, $event)">{{ t('ADMIN_COMMENT_UNTOP') }}</a>
-            <a v-if="!comment.rid && !comment.top" @click="handleTop(true, $event)">{{ t('ADMIN_COMMENT_TOP') }}</a>
+            <button v-if="comment.isSpam" @click="handleSpam(false, $event)">{{ t('ADMIN_COMMENT_SHOW') }}</button>
+            <button v-if="!comment.isSpam" @click="handleSpam(true, $event)">{{ t('ADMIN_COMMENT_HIDE') }}</button>
+            <button v-if="!comment.rid && comment.top" @click="handleTop(false, $event)">{{ t('ADMIN_COMMENT_UNTOP')
+              }}</button>
+            <button v-if="!comment.rid && !comment.top" @click="handleTop(true, $event)">{{ t('ADMIN_COMMENT_TOP')
+              }}</button>
           </small>
         </div>
         <tk-action :liked="liked" :disliked="disliked" :like-count="ups" :dislike-count="downs"

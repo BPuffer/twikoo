@@ -1,7 +1,7 @@
 <template>
   <div class="tk-admin-container">
     <div class="tk-admin" :class="{ '__show': show }" v-loading="loading">
-      <a class="tk-admin-close" @click="onClose" v-html="iconClose"></a>
+      <button class="tk-admin-close" @click="onClose" v-html="iconClose"></button>
       <div class="tk-login-title" v-if="needUpdate">
         <div>{{ t('ADMIN_NEED_UPDATE') }}</div>
         <a href="https://twikoo.js.org/update.html" target="_blank">https://twikoo.js.org/update.html</a>
@@ -20,7 +20,7 @@
           <div class="tk-login-msg" v-if="loginErrorMessage">
             {{ loginErrorMessage }}
             <a href="https://twikoo.js.org/faq.html" rel="noopener noreferrer" target="_blank">{{ t('ADMIN_FORGOT')
-              }}</a>
+            }}</a>
           </div>
         </div>
         <div class="tk-regist" v-if="!isLogin && !isSetPassword">
@@ -40,12 +40,12 @@
             </el-input>
           </form>
           <el-button class="tk-regist-button" :disabled="!canRegist" @click="onRegist">{{ t('ADMIN_REGIST')
-            }}</el-button>
+          }}</el-button>
           <div class="tk-login-msg" v-if="loginErrorMessage">{{ loginErrorMessage }}</div>
           <div class="tk-login-msg" v-if="!isSetCredentials">
             <a href="https://twikoo.js.org/faq.html" rel="noopener noreferrer" target="_blank">{{
               t('ADMIN_CREDENTIALS_FAQ')
-              }}</a>
+            }}</a>
           </div>
         </div>
         <div class="tk-panel" v-if="isLogin">
